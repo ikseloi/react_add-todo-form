@@ -1,6 +1,4 @@
-import type { TodoFromServer } from '../types/TodoFromServer';
-
-const todos: TodoFromServer[] = [
+export default [
   {
     id: 1,
     title: 'delectus aut autem',
@@ -20,5 +18,3 @@ const todos: TodoFromServer[] = [
     userId: 4,
   },
 ];
-
-export default todos;

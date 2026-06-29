@@ -1,9 +1,6 @@
+import type { TodoFromServer } from './TodoFromServer';
 import type { User } from './User';
 
-export interface Todo {
-  id: number;
-  title: string;
-  userId: number;
-  completed: boolean;
+export interface Todo extends TodoFromServer {
   user: User | null;
 }

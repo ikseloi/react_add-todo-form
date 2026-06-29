@@ -8,7 +8,7 @@ type Props = {
 export const TodoList = ({ todos }: Props) => (
   <section>
     {todos.map(todo => (
-      <TodoInfo key={todo.id} todo={todo} data-id={todo.id} />
+      <TodoInfo key={todo.id} todo={todo} />
     ))}
   </section>
 );

@@ -1,6 +1,4 @@
-import type { User } from '../types/User';
-
-export const users: User[] = [
+export default [
   {
     id: 1,
     name: 'Leanne Graham',
@@ -62,5 +60,3 @@ export const users: User[] = [
     email: 'Rey.Padberg@karina.biz',
   },
 ];
-
-export default users;

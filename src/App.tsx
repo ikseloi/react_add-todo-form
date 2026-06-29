@@ -1,20 +1,23 @@
 import './App.scss';
 import { useState } from 'react';
 
+import type { TodoFromServer } from './types/TodoFromServer';
+import type { Todo } from './types/Todo';
+import type { User } from './types/User';
+
 import { TodoList } from './components/TodoList';
 
-import type { Todo } from './types/Todo';
+import usersData from './api/users';
+import todosData from './api/todos';
 
-import usersFromServer from './api/users';
-import todosFromServer from './api/todos';
+const users: User[] = usersData;
+const todosFromServer: TodoFromServer[] = todosData;
 
 export const App = () => {
   const [todos, setTodos] = useState<Todo[]>(() =>
     todosFromServer.map(todo => ({
       ...todo,
-      user:
-        usersFromServer.find(serverUser => serverUser.id === todo.userId) ??
-        null,
+      user: users.find(user => user.id === todo.userId) ?? null,
     })),
   );
 
@@ -24,7 +27,7 @@ export const App = () => {
   const [titleError, setTitleError] = useState(false);
   const [userError, setUserError] = useState(false);
 
-  const handleSubmit = (event: React.FormEvent) => {
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     const isValidTitle = title.trim() !== '';
@@ -37,7 +40,7 @@ export const App = () => {
       return;
     }
 
-    const selectUser = usersFromServer.find(user => user.id === userId) ?? null;
+    const selectedUser = users.find(user => user.id === userId) ?? null;
 
     const newTodoId = Math.max(0, ...todos.map(todo => todo.id)) + 1;
     const newTodo: Todo = {
@@ -45,7 +48,7 @@ export const App = () => {
       title: title.trim(),
       userId,
       completed: false,
-      user: selectUser,
+      user: selectedUser,
     };
 
     setTodos(previousTodos => [...previousTodos, newTodo]);
@@ -65,7 +68,12 @@ export const App = () => {
             placeholder="Enter a title"
             value={title}
             onChange={event => {
-              setTitle(event.target.value);
+              const cleanedValue = event.target.value.replace(
+                /[^a-zA-Zа-яА-ЯєЄіІїЇґҐ0-9 ]/g,
+                '',
+              );
+
+              setTitle(cleanedValue);
               setTitleError(false);
             }}
           />
@@ -84,7 +92,7 @@ export const App = () => {
             <option value="0" disabled>
               Choose a user
             </option>
-            {usersFromServer.map(user => (
+            {users.map(user => (
               <option key={user.id} value={user.id}>
                 {user.name}
               </option>
